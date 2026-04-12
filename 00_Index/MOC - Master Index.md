@@ -82,14 +82,37 @@
 
 ---
 
+## Infrastructure — Claws (added 2026-04-12)
+
+> The Claws are the operational nodes that execute the mission. Full documentation in `11_Claws/`.
+
+### Claws Master
+- [[11_Claws/00_CLAWS_MASTER]] — Overview of all 5 Claws, quick access, session history
+
+### Active Claws (3)
+- [[11_Claws/OpenClaw]] — Primary worker server (46.225.51.30, Nuremberg) — 9+ Telegram bots
+- [[11_Claws/NemoClaw]] — n8n workflow automation stack — Council of Seven — **control brain**
+- [[11_Claws/NanoClaw]] — Claude SDK Telegram agent v1.2.17 (204.168.143.98, Helsinki)
+
+### Planned Claws (2)
+- [[11_Claws/InstantlyClaw]] — Instant messaging / rapid response (not yet built)
+- [[11_Claws/FireClaw]] — High-speed execution / fire & forget (not yet built)
+
+### Infrastructure & Logs
+- [[11_Claws/Infrastructure_Map]] — Full server specs, ports, bots, network topology, setup scripts
+- [[11_Claws/Session_2026-04-12]] — First Claws audit; NemoClaw nginx fix; this documentation created
+
+---
+
 ## Storage Architecture
 
 | Location | What Lives There | Sync Method |
 |---|---|---|
-| **iMac Obsidian vault** | This vault — all research, analysis, comparisons | Primary workspace |
+| **iMac Obsidian vault** | This vault — all research, analysis, comparisons, Claws docs | Primary workspace |
 | **Hetzner vault** | `~/.openclaw/workspace/research/theory-of-everything-phd/` | ChatGPT writes here; rsync to iMac |
 | **Notion** | Shareable versions of key documents | Manual export when ready |
 | **Telegram** | Progress updates to @UrantiPedia_Agent_01_bot | Automated via bot (when unblocked) |
+| **GitHub** | phd-triune-monism repo (this vault) | Git sync via Obsidian Git plugin |
 
 ## Sync Commands
 
@@ -101,6 +124,9 @@ rsync -avz mircea@46.225.51.30:~/.openclaw/workspace/research/theory-of-everythi
 # Push iMac work to Hetzner
 rsync -avz "/Users/mircea8me.com/OpenClaw code for Hetzy_PhD_bot to Telegram/10_Ontology/" \
   mircea@46.225.51.30:~/.openclaw/workspace/research/theory-of-everything-phd/10_Ontology/
+
+# Pull Claws docs from GitHub into Obsidian
+git pull origin claude/count-claws-NrqRh
 ```
 
 ---
@@ -139,4 +165,4 @@ rsync -avz "/Users/mircea8me.com/OpenClaw code for Hetzy_PhD_bot to Telegram/10_
 
 **Average TM advantage: +17.6% across all 11 comparisons**
 
-*Last updated: 2026-03-16*
+*Last updated: 2026-04-12*

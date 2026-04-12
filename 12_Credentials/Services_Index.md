@@ -5,14 +5,17 @@
 
 ---
 
-## AI / LLM Services
+## AI / LLM Services — Council of Seven
 
-| Service | URL | Key Name in SECRETS.md | Used By | Status |
-|---------|-----|------------------------|---------|--------|
-| **Z.ai / ZhipuAI GLM** | https://chat.z.ai | `Z_AI_API_KEY` | NemoClaw Seat6_GLM node | ✅ Have key |
-| **Anthropic / Claude** | https://api.anthropic.com | `ANTHROPIC_API_KEY` | NanoClaw, Claude Code | ✅ Have key |
-| **OpenAI** | https://api.openai.com | `OPENAI_API_KEY` | n8n workflows | ❓ Check |
-| **Ollama** | 204.168.143.98 (local) | none — local model | URANTiOS | ✅ No key needed |
+| Seat | Service | URL | Key Name | Used By | Build Order | Status |
+|------|---------|-----|----------|---------|-------------|--------|
+| 6 | **Z.ai / ZhipuAI GLM** | https://chat.z.ai | `Z_AI_API_KEY` | Seat6_SonSpirit_GLM | **1st — WIRE NOW** | ✅ Have key |
+| 4 | **Ollama / Gemma** | 204.168.143.98:11434 | none — local | Seat4_FatherSon_Ollama | 2nd — no key | ✅ No key needed |
+| 2 | **Anthropic / Claude** | https://api.anthropic.com | `ANTHROPIC_API_KEY` | Seat2_Son_Claude, NanoClaw | 3rd | ✅ Have key |
+| 3 | **Google Gemini** | https://generativelanguage.googleapis.com | `GOOGLE_API_KEY` | Seat3_Spirit_Gemini | 4th | ❓ Need key |
+| 1 | **OpenAI** | https://api.openai.com | `OPENAI_API_KEY` | Seat1_Father_GPT, Gabriel | 5th | ❓ Need key |
+| 5 | **DeepSeek** | https://api.deepseek.com | `DEEPSEEK_API_KEY` | Seat5_FatherSpirit_DeepSeek | 6th | ❓ Need key |
+| 7 | **xAI / Grok** | https://api.x.ai | `XAI_API_KEY` | Seat7_Trinity_Grok | 7th | ❓ Need key |
 
 ## Telegram
 

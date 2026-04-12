@@ -53,10 +53,13 @@ nemoclaw-paperclip  # Node 22 — file handling
 
 ## Key Workflows in n8n
 
-| Workflow | Purpose |
-|----------|---------|
-| Council of Seven Master Spirits — v2 | Main orchestration workflow |
-| Seat6_GLM | GLM model integration node |
+| Workflow | Purpose | File |
+|----------|---------|------|
+| **Council of Seven Master Spirits v1** | 7 AI seats + Gabriel synthesizer | `council/council_of_seven_v1.n8n.json` |
+
+Import: n8n → Workflows → New → `...` → Import from JSON → paste workflow file content.
+
+Full docs: [[Council_of_Seven]]
 
 ## Integration Points
 

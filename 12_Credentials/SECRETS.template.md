@@ -10,13 +10,25 @@
 ## AI / LLM
 
 ```
+# --- Council of Seven: Seat 6 (HAVE KEY) ---
 Z_AI_API_KEY=
 Z_AI_EMAIL=mircea8@me.com
 Z_AI_PASSWORD=
 
+# --- Council of Seven: Seat 2 ---
 ANTHROPIC_API_KEY=
 
+# --- Council of Seven: Seat 1 + Gabriel ---
 OPENAI_API_KEY=
+
+# --- Council of Seven: Seat 3 ---
+GOOGLE_API_KEY=
+
+# --- Council of Seven: Seat 5 ---
+DEEPSEEK_API_KEY=
+
+# --- Council of Seven: Seat 7 ---
+XAI_API_KEY=
 ```
 
 ## Telegram

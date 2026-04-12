@@ -53,9 +53,17 @@ Full details: [[Infrastructure_Map]]
 
 ---
 
+## Council of Seven Master Spirits
+
+The Council runs inside **NemoClaw** (n8n). Seven AI seats answer questions in parallel; Gabriel synthesizes.
+
+- Schema + workflow: `mircea-constellation/council/`
+- Obsidian docs: [[11_Claws/Council_of_Seven]]
+- Build status: Seat 6 (GLM/Z.ai) — **NEXT TO WIRE** (key exists)
+
 ## Session History
 
-- [[Session_2026-04-12]] — First full Claws audit; NemoClaw fix deployed
+- [[Session_2026-04-12]] — First full Claws audit; NemoClaw fix; credentials system; Council of Seven built
 
 ---
 

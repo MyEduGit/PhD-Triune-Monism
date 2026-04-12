@@ -58,7 +58,9 @@ Full details: [[Infrastructure_Map]]
 The Council runs inside **NemoClaw** (n8n). Seven AI seats answer questions in parallel; Gabriel synthesizes.
 
 - Schema + workflow: `mircea-constellation/council/`
-- Obsidian docs: [[11_Claws/Council_of_Seven]]
+- Obsidian docs: [[Council_of_Seven]]
+- To-Do (actionable checklist): [[Council_ToDo]]
+- Seat test proofs: [[Proofs/README]]
 - Build status: Seat 6 (GLM/Z.ai) — **NEXT TO WIRE** (key exists)
 
 ## Session History

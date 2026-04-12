@@ -1,0 +1,12 @@
+# Secrets — stay LOCAL only, never commit
+12_Credentials/SECRETS.md
+12_Credentials/SECRETS.local.md
+*.secrets.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json

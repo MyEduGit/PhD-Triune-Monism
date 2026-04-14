@@ -120,7 +120,7 @@ fi
         pushd "$VAULT_DIR" >/dev/null
         git add "$JOB_DATE/$JOB_SLUG" "$MASTER_MERMAID" "$JOBS_MANIFEST" || true
         if ! git diff --cached --quiet; then
-            git commit -m "doc: $JOB_SLUG \u2014 scaffold + manifest + master regen" || true
+            git commit -m "doc: $JOB_SLUG — scaffold + manifest + master regen" || true
             CUR_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
             git push origin "$CUR_BRANCH" || echo "[doc] push skipped or failed; inspect manually"
         else
@@ -137,7 +137,7 @@ if [[ -n "$NOTION_TOKEN" ]]; then
     PAYLOAD=$(cat <<EOF
 {
   "parent": { "page_id": "$NOTION_PARENT_ID" },
-  "properties": { "title": [{ "text": { "content": "$JOB_SLUG \u2014 $JOB_DATE" } }] },
+  "properties": { "title": [{ "text": { "content": "$JOB_SLUG — $JOB_DATE" } }] },
   "children": [
     { "object":"block","type":"heading_2","heading_2":{"rich_text":[{"type":"text","text":{"content":"$JOB_SLUG"}}]}},
     { "object":"block","type":"paragraph","paragraph":{"rich_text":[{"type":"text","text":{"content":"Job folder: $JOB_DATE/$JOB_SLUG"}}]}}
@@ -159,7 +159,7 @@ EOF
     fi
     rm -f "$RESP_TMP"
 else
-    echo "[doc] NOTION_TOKEN not set \u2014 Notion page NOT created (honest skip)"
+    echo "[doc] NOTION_TOKEN not set — Notion page NOT created (honest skip)"
 fi
 
 # --- Zapier: honest ---
@@ -172,7 +172,7 @@ if [[ -n "$ZAPIER_HOOK_URL" ]]; then
         echo "[doc] Zapier fan-out FAILED"
     fi
 else
-    echo "[doc] ZAPIER_HOOK_URL empty \u2014 fan-out skipped"
+    echo "[doc] ZAPIER_HOOK_URL empty — fan-out skipped"
 fi
 
 echo "[doc] done job=$JOB_SLUG log=$LOG_FILE"

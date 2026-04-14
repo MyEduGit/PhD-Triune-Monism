@@ -26,7 +26,7 @@ flowchart TD
     GPT["🟢 ChatGPT<br/><b>Editor / Writer</b><br/>api.openai.com<br/>signs: gpt@foursome"]
     Claude["🟢 Claude Code<br/><b>Architect / Reasoner</b><br/>api.anthropic.com<br/>signs: claude@foursome"]
     Grok["🟢 Grok<br/><b>Truth-Seeker / Builder</b><br/>api.x.ai<br/>signs: grok@foursome"]
-    Gemma["🟢 Gemma 3:4b<br/><b>Local Thinker / Fact-Checker</b><br/>Ollama @ urantios-prime<br/>100.72.238.7:11434<br/>signs: gemma@foursome"]
+    Gemma["🟢 Gemma 4:e4b<br/><b>Local Thinker / Fact-Checker</b><br/>Ollama @ urantios-prime<br/>100.72.238.7:11434<br/>9.6 GB · ID c6eb396dbd59<br/>signs: gemma@foursome"]
 
     %% ===== RESPONSE COLLECTOR =====
     Resp["📥 Vault Responses<br/>jobs/&lt;task&gt;/responses/<br/>├─ gpt.md<br/>├─ claude.md<br/>├─ grok.md<br/>└─ gemma.md<br/><i>AI signature + timestamp</i>"]
@@ -87,7 +87,18 @@ flowchart TD
 | **ChatGPT** | Editor / Writer | `api.openai.com` | `gpt@foursome` |
 | **Claude Code** | Architect / Reasoner | `api.anthropic.com` | `claude@foursome` |
 | **Grok** | Truth-Seeker / Builder | `api.x.ai` | `grok@foursome` |
-| **Gemma 3:4b** | Local Thinker / Fact-Checker | Ollama @ `urantios-prime` (`100.72.238.7:11434`) | `gemma@foursome` |
+| **Gemma 4:e4b** | Local Thinker / Fact-Checker | Ollama @ `urantios-prime` (`100.72.238.7:11434`) | `gemma@foursome` |
+
+**Gemma 4 model selection.** Verified via `ollama list` on iMac_M4:
+
+| Tag | Model ID | Size | Notes |
+|---|---|---|---|
+| `gemma4:e2b` | `7fbdbf8f5e45` | 7.2 GB | Smaller, faster |
+| `gemma4:e4b` | `c6eb396dbd59` | 9.6 GB | **Foursome default** — balanced speed/capability |
+| `gemma4:latest` | `c6eb396dbd59` | 9.6 GB | Alias of `e4b` |
+| `gemma4:31b` | `6316f0629137` | 19 GB | Heavyweight — use for deep reasoning jobs only |
+
+`gemma4:e4b` is the Foursome's Local Thinker. For jobs requiring deeper reasoning, the orchestrator can route to `gemma4:31b` instead via a job-level flag in `input.md` frontmatter (`gemma_model: gemma4:31b`).
 
 ## Vault convention
 
@@ -100,7 +111,7 @@ PhD-Triune-Monism/
             ├── gpt.md                  # ChatGPT's signed reply
             ├── claude.md               # Claude's signed reply
             ├── grok.md                 # Grok's signed reply
-            └── gemma.md                # Gemma 3:4b's signed reply
+            └── gemma.md                # Gemma 4:e4b's signed reply
 ```
 
 Each response file carries AI signature + ISO timestamp in its frontmatter.

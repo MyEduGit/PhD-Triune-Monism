@@ -74,6 +74,10 @@
 ### Draft Papers
 - [[06_Draft_Papers/THEORY-OF-EVERYTHING-DRAFT]] — First draft (~4,000 words, target 8,000-10,000)
 
+### Generated Books (URANTiOS BookWriter)
+- [[07_Generated_Books/README]] — Automated book generation — vault destination for the URANTiOS BookWriter
+- [[07_Generated_Books/Books/_Books MOC]] — Master index of every generated book
+
 ### Daily Log
 - [[12_Daily_Log/2026-03-11]] — Day 1: ALL 6 PHASES + all comparisons + PhD proposal (7 days ahead of schedule)
 

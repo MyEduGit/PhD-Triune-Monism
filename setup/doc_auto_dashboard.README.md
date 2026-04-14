@@ -1,8 +1,9 @@
 # `doc_auto_dashboard.sh` — Truth Report
 
-Shipped verbatim from the user-supplied snippet (2026-04-14 16:38 AEDT).
-The script works as a scaffold, but three behaviours will bite on first
-real run. Documenting here so they get fixed deliberately, not silently.
+Shipped verbatim from the user-supplied snippet.
+Latest source: v2 (2026-04-14 16:50 AEDT) with Canva MCP fallback.
+The script works as a scaffold, but several behaviours will bite on
+first real run. Documenting so they get fixed deliberately, not silently.
 
 ## Issue 1 — Master Mermaid becomes invalid after first job
 
@@ -56,6 +57,33 @@ API) replaces this line. The claim in the script output is louder than
 the truth on the wire — fix before the script is wired to anything
 visible.
 
+## Issue 4 — `canva-cli` is not a shell binary
+
+v2 of the installer added:
+
+```bash
+if command -v canva-cli &> /dev/null; then
+    canva-cli generate-design-structured ...
+fi
+```
+
+There is no `canva-cli` program on PATH — Canva exposes its tools via
+an **MCP server** inside Claude Code (tool name
+`generate-design-structured`), not as a local CLI. The `command -v`
+check will always fail and the script will print
+`Canva MCP CLI not available, skipping fallback` every run, even when
+Canva is fully reachable.
+
+**Fix options:**
+
+- Call Canva from inside a Claude Code session via the MCP tool, not
+  from a shell. The `/doc` skill can invoke MCP tools directly.
+- If a shell hook is needed, wrap the MCP call behind a small Node /
+  Python helper that talks to the MCP server over stdio, and have the
+  script `command -v` that helper — not an imaginary `canva-cli`.
+- Or drop the Canva step from the shell installer entirely and do it
+  in-session only.
+
 ## Minor
 
 - `git commit` will fail if there is nothing staged; script does not
@@ -65,5 +93,7 @@ visible.
   branch is `claude/multi-ai-obsidian-integration-jkoI9`. Confirm which
   branch should be the live dashboard target.
 - No `set -euo pipefail` — a failure mid-script is silent.
+- The `mmdc -i master_pipeline.mmd` render step will fail once Issue 1
+  produces invalid Mermaid; the script will not notice.
 
 ## When these are fixed, delete this file.

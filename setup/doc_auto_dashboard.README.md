@@ -1,99 +1,77 @@
-# `doc_auto_dashboard.sh` — Truth Report
+# `doc_auto_dashboard.sh` — Patch Status
 
-Shipped verbatim from the user-supplied snippet.
-Latest source: v2 (2026-04-14 16:50 AEDT) with Canva MCP fallback.
-The script works as a scaffold, but several behaviours will bite on
-first real run. Documenting so they get fixed deliberately, not silently.
+All four originally-flagged issues are addressed in the current version
+of `setup/doc_auto_dashboard.sh`. Kept here as an audit trail.
 
-## Issue 1 — Master Mermaid becomes invalid after first job
+## Issue 1 — Master Mermaid invalid after first job
 
-The installer appends:
+**Status:** PATCHED.
 
-```text
-%% Job: <slug> added ...
-    click G href "..." "Open GitHub folder for <slug>"
-    click N href "..." "Open Notion page for <slug>"
-```
+Old behaviour: appended `click G` / `click N` below the closing of the
+diagram, reusing the same IDs, producing invalid Mermaid and
+overwritten click bindings.
 
-after the last line of `master_pipeline.mmd`. Two problems:
+Fix: `master_pipeline.mmd` is now **regenerated** on every run from
+`setup/master_pipeline.template.mmd` plus the `setup/jobs.json`
+manifest. Each job gets a unique node ID derived from its slug
+(`G_<slug_sanitized>`) and a `click` binding inside the flowchart
+block. No more appends; no more ID collisions.
 
-1. `click` statements must live **inside** the `flowchart TD` block that
-   declared the node IDs they reference. Appending below the closing of
-   the diagram leaves them outside the parse scope in strict renderers.
-2. Every job reuses the same node IDs `G` and `N`, so the Mermaid
-   renderer will overwrite the click binding on each append — only the
-   most recent job will be clickable.
+## Issue 2 — GitHub link pointed at wrong repo
 
-**Fix options:**
+**Status:** PATCHED.
 
-- Insert clicks before the last line of the diagram using `sed -i` with
-  a marker comment like `%% CLICKS_BELOW`.
-- Use unique node IDs per job: `G_<slug>` and `N_<slug>`, and add the
-  actual nodes (not just clicks) to the diagram.
-- Or regenerate `master_pipeline.mmd` from a template + a `jobs.json`
-  manifest on every run instead of appending.
+Old default: `GITHUB_REPO=myedugit/mircea-constellation` with
+`VAULT_DIR=.../PhD-Triune-Monism` — all tree URLs 404'd.
 
-## Issue 2 — GitHub link points at the wrong repo
+Fix: defaults are now
+`GITHUB_REPO=myedugit/phd-triune-monism` and
+`GITHUB_BRANCH=claude/multi-ai-obsidian-integration-jkoI9`. Both are
+overridable via env. Click URLs resolve.
 
-```bash
-VAULT_DIR=~/Documents/Obsidian/PhD-Triune-Monism
-GITHUB_REPO="myedugit/mircea-constellation"
-```
+## Issue 3 — Notion page creation was an echo stub
 
-The script commits inside the PhD-Triune-Monism vault but generates
-click URLs pointing at `mircea-constellation` — the tree path will
-404. Set `GITHUB_REPO="myedugit/phd-triune-monism"` unless there is an
-intentional reason to link users to a different repo.
+**Status:** PATCHED.
 
-## Issue 3 — Notion page creation is an echo, not an API call
+Old behaviour: `echo "[✓] Notion page created ..."` — no API call.
 
-```bash
-echo "[✓] Notion page created for $JOB_SLUG under parent $NOTION_PAGE_ID"
-```
+Fix: when `NOTION_TOKEN` is set, the script now POSTs to
+`https://api.notion.com/v1/pages` with the configured parent page ID
+and reports the real HTTP status. When the token is absent, it prints
+`NOTION_TOKEN not set — Notion page NOT created (honest skip)` and
+moves on. Claim matches reality in both branches.
 
-No page is actually created. Every job's Notion click link points at
-the same parent page until a real MCP call (or `curl` to the Notion
-API) replaces this line. The claim in the script output is louder than
-the truth on the wire — fix before the script is wired to anything
-visible.
+## Issue 4 — `canva-cli` was a phantom binary
 
-## Issue 4 — `canva-cli` is not a shell binary
+**Status:** PATCHED.
 
-v2 of the installer added:
+Old behaviour: script called `canva-cli generate-design-structured`
+which is not a real binary — Canva is an MCP tool, not a shell CLI.
 
-```bash
-if command -v canva-cli &> /dev/null; then
-    canva-cli generate-design-structured ...
-fi
-```
+Fix: the `canva-cli` call is removed. When `CANVA_FALLBACK=true` is
+set, the script prints an honest note explaining that Canva must be
+invoked from a Claude Code session via the
+`generate-design-structured` MCP tool, and does nothing else. No more
+false-success or confusing "CLI not available" messages.
 
-There is no `canva-cli` program on PATH — Canva exposes its tools via
-an **MCP server** inside Claude Code (tool name
-`generate-design-structured`), not as a local CLI. The `command -v`
-check will always fail and the script will print
-`Canva MCP CLI not available, skipping fallback` every run, even when
-Canva is fully reachable.
+## Concurrency (new)
 
-**Fix options:**
+- `set -euo pipefail` at the top.
+- `flock -x` on `$VAULT_DIR/.doc.lock` around manifest update, master
+  regen, Mermaid render, and the entire `git add/commit/push`
+  sequence. Parallel runs now serialize on git and on the shared
+  master file.
+- `git commit` runs only if `git diff --cached` is non-empty. No empty
+  commits, no accidental inclusion of unrelated staged work.
+- All stdout/stderr is tee'd to
+  `$VAULT_DIR/StressTestLogs/<slug>_<timestamp>.log` for audit.
 
-- Call Canva from inside a Claude Code session via the MCP tool, not
-  from a shell. The `/doc` skill can invoke MCP tools directly.
-- If a shell hook is needed, wrap the MCP call behind a small Node /
-  Python helper that talks to the MCP server over stdio, and have the
-  script `command -v` that helper — not an imaginary `canva-cli`.
-- Or drop the Canva step from the shell installer entirely and do it
-  in-session only.
+## Remaining caveats (honest)
 
-## Minor
-
-- `git commit` will fail if there is nothing staged; script does not
-  check `--allow-empty` or branch status. On the first run with
-  pre-existing changes it may commit more than just the job folder.
-- `GITHUB_BRANCH="claude/claude-usage-guide-mtE8j"` is hard-coded; this
-  branch is `claude/multi-ai-obsidian-integration-jkoI9`. Confirm which
-  branch should be the live dashboard target.
-- No `set -euo pipefail` — a failure mid-script is silent.
-- The `mmdc -i master_pipeline.mmd` render step will fail once Issue 1
-  produces invalid Mermaid; the script will not notice.
-
-## When these are fixed, delete this file.
+- Requires `jq` on PATH for manifest and master regen. Without it, the
+  script prints a WARN and proceeds without updating the manifest.
+- Requires `mmdc` for SVG/PNG. Without it, SVG/PNG are skipped with a
+  log line; the scaffold still ships.
+- `flock` is Linux/macOS; won't work on bare Windows shells.
+- `GITHUB_BRANCH` default is this feature branch. Set
+  `GITHUB_BRANCH=main` once the work is merged.

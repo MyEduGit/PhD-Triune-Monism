@@ -1,0 +1,3 @@
+[doc] start job=phase-a-dryrun-01 date=2026-04-14 pid=14294
+[doc] mmdc not installed; skipping SVG/PNG render for job
+setup/doc_auto_dashboard.sh: line 86: flock: command not found

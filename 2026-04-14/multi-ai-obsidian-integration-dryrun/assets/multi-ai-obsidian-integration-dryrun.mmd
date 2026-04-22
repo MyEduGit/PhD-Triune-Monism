@@ -1,0 +1,26 @@
+flowchart LR
+    subgraph Sources[Four AI Sources]
+        CG[ChatGPT]
+        CC[Claude Code]
+        GK[Grok]
+        GM[Gemma4 local]
+    end
+
+    subgraph Vault[Obsidian Vault: PhD-Triune-Monism]
+        J[job.md]
+        A[assets/]
+        T[transcripts/]
+        R[raw/]
+    end
+
+    CG --> T
+    CC --> T
+    GK --> T
+    GM --> T
+    T --> J
+    A --> J
+    R --> J
+
+    J --> GH[GitHub commit]
+    J --> NT[Notion page]
+    NT -->|optional| ZP[Zapier fan-out]

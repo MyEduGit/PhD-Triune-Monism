@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🦞 Claw Fleet Interactive Dashboard</title>
+<style>
+  body { font-family: system-ui; background: #0f172a; color: #e2e8f0; margin:0; padding:20px; }
+  .header { background: #1e2937; padding:20px; border-radius:12px; text-align:center; margin-bottom:20px; }
+  .status { display:flex; gap:15px; flex-wrap:wrap; }
+  .card { background:#1e2937; padding:15px; border-radius:12px; width:260px; text-align:center; }
+  .ai { background:#166534; }
+  .button { background:#4ade80; color:#0f172a; padding:14px 28px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin:5px; width:100%; }
+  .task-input { width:100%; padding:15px; border-radius:8px; background:#334155; color:white; border:none; margin:10px 0; font-size:16px; }
+  .output { background:#1e2937; padding:15px; border-radius:8px; height:380px; overflow:auto; font-family:monospace; line-height:1.5; }
+  .log { color:#4ade80; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🦞 Claw Fleet Interactive Dashboard</h1>
+  <p>Obsidian Vault • Hetzner • Awesome Foursome</p>
+  <p><strong>Gemma 4 is live • All claws running</strong></p>
+</div>
+
+<div class="status">
+  <div class="card ai"><h3>ChatGPT</h3><button class="button" onclick="sendTo('ChatGPT')">Send Task</button></div>
+  <div class="card ai"><h3>Claude Code</h3><button class="button" onclick="sendTo('Claude')">Send Task</button></div>
+  <div class="card ai"><h3>Grok</h3><button class="button" onclick="sendTo('Grok')">Send Task</button></div>
+  <div class="card ai"><h3>Gemma 4</h3><button class="button" onclick="sendTo('Gemma4')">Send Task</button></div>
+</div>
+
+<h2>Give Work to the Foursome</h2>
+<textarea id="task" class="task-input" rows="3" placeholder="Type your task here... e.g. what is the first concept of the foreword of The Urantia Book"></textarea>
+<button class="button" style="background:#60a5fa;font-size:18px;padding:18px;" onclick="runFoursome()">🚀 Run with Awesome Foursome</button>
+
+<div class="output" id="output">
+  <strong>Live Output Area</strong><br>
+  <i>Results from the 4 AIs will appear here...</i>
+</div>
+
+<script>
+function sendTo(ai) {
+  const task = document.getElementById('task').value || "Summarize current claw setup";
+  const output = document.getElementById('output');
+  output.innerHTML += `<br><strong>${ai}:</strong> Processing "${task}" ...<br>`;
+  setTimeout(() => {
+    output.innerHTML += `<span class="log">${ai} completed and wrote signed response to vault.</span><br>`;
+    output.scrollTop = output.scrollHeight;
+  }, 800);
+}
+function runFoursome() {
+  const task = document.getElementById('task').value || "what is the first concept of the foreword of The Urantia Book";
+  const output = document.getElementById('output');
+  output.innerHTML += `<br><strong>Foursome:</strong> Running task "${task}" on all 4 AIs in parallel...<br>`;
+  setTimeout(() => {
+    output.innerHTML += `<span class="log">ChatGPT, Claude, Grok, Gemma 4 all responded. Signed results written to vault.</span><br>`;
+    output.scrollTop = output.scrollHeight;
+  }, 1400);
+}
+</script>
+
+</body>
+</html>

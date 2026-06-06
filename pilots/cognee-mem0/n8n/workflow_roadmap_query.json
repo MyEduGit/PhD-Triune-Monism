@@ -1,0 +1,51 @@
+{
+  "name": "Roadmap Memory Query — Hybrid Router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "roadmap-query",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "roadmap-memory-query"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8765/query",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\"query\": \"{{ $json.body.query }}\", \"force_route\": \"{{ $json.body.force_route || '' }}\"}",
+        "options": { "timeout": 30000 }
+      },
+      "name": "Query Memory Router",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}"
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Query Memory Router", "type": "main", "index": 0 }]]
+    },
+    "Query Memory Router": {
+      "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}
